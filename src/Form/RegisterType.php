@@ -25,6 +25,7 @@ class RegisterType extends AbstractType
 
                 'attr' => [
                     'placeholder' => 'Username',
+                    'class' => 'form-control form-control-user'
                 ],
                 'label' => 'Username',
                 'required' => true,
@@ -42,6 +43,7 @@ class RegisterType extends AbstractType
 
                 'attr' => [
                     'placeholder' => 'Firstname',
+                    'class' => 'form-control form-control-user'
                 ],
                 'label' => 'Firstname',
                 'required' => true,
@@ -62,9 +64,10 @@ class RegisterType extends AbstractType
             ])
             ->add('lastname', TextType::class, [
                 'attr' => [
-                    'placeholder' => 'lastname',
+                    'placeholder' => 'Lastname',
+                    'class' => 'form-control form-control-user'
                 ],
-                'label' => 'lastname',
+                'label' => 'Last Name',
                 'required' => true,
                 'constraints' => [
                     new NotBlank([
@@ -83,6 +86,7 @@ class RegisterType extends AbstractType
             ->add('email', EmailType::class, [
                 'attr' => [
                     'placeholder' => 'Email',
+                    'class' => 'form-control form-control-user'
                 ],
                 'label' => 'Email',
                 'required' => true,
@@ -109,15 +113,18 @@ class RegisterType extends AbstractType
                     'invalid_message' => 'The new password fields must match.',
                     'first_options' => [
                         'label' => 'New Password',
+                        'attr' => [
+                            'class' => 'form-control form-control-user'
+                        ],
                     ],
                     'second_options' => [
                         'label' => 'Confirm New Password',
+                        'attr' => [
+                            'class' => 'form-control form-control-user'
+                        ],
                     ]
 
-                ])
-            ->add('submit', SubmitType::class, [
-                'label' => 'Submit'
-            ]);
+                ]);
     }
 
     public function configureOptions(OptionsResolver $resolver): void

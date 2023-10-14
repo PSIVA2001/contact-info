@@ -1,11 +1,205 @@
+{% extends "base.html.twig" %}
+{% form_theme form 'form/bootstrap_5_layout.html.twig' %}
 {% block head %}
+    {{ parent() }}
     {% block stylesheets %}
-        {{ encore_entry_link_tags('app') }}
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.5.3/dist/css/bootstrap.min.css" integrity="sha384-TX8t27EcRE3e/ihU7zmQxVncDAy5uIKz4rEkgIXeMed4M0jlfIDPvg6uqKI2xXr2" crossorigin="anonymous">
+        {{ parent() }}
+        <style>
+            .col-md-4 {
+                margin: 8px 0;
+            }
+            .delete-button {
+                color: red;
+            }
+            .edit-button{
+                cursor: pointer;
+            }
+            .validation-message{
+                color: red;
+            }
+            td a{
+                padding: 7px;
+                font-size: 20px;
+            }
+        </style>
     {% endblock %}
 {% endblock %}
 {% block body %}
-    <h5>contact page</h5>
-{% endblock %}
-{% block javascripts %}
-    {{ encore_entry_script_tags('app') }}
+    {% block content %}
+        <div class="card shadow mb-4">
+            <div class="card-header py-3">
+                <h6 class="m-0 font-weight-bold text-primary">Contact Information List</h6>
+            </div>
+            {% for message in app.flashes('success') %}
+                <div class="p-4">
+                    <div class="alert alert-success">
+                        {{ message }}
+                    </div>
+                </div>
+            {% endfor %}
+            {% for message in app.flashes('error') %}
+                <div class="p-4">
+                    <div class="alert alert-danger">
+                        {{ message }}
+                    </div>
+                </div>
+            {% endfor %}
+
+            <div class="row edit-contact" style="display:none">
+                <div class="col-md-2 pl-5 pt-5">
+                    <h4>Edit Contact</h4>
+                </div>
+                <form id="edit-form">
+                    <div class="row p-4 justify-content-around">
+                        <div class="col-md-4">
+                            <label>title</label>
+                            <input class="form-control" type="text" id="edit-title" name="title">
+                        </div>
+                        <div class="col-md-4">
+                            <label>firstname</label>
+                            <input class="form-control" type="text" id="edit-firstname" name="firstname">
+                        </div>
+                        <div class="col-md-4">
+                            <label>lastname</label>
+                            <input class="form-control" type="text" id="edit-lastname" name="lastname">
+                        </div>
+                        <div class="col-md-4">
+                            <label>email</label>
+                            <input class="form-control" type="email" id="edit-email" name="email">
+                        </div>
+                        <div class="col-md-4">
+                            <label>contactnumber</label>
+                            <input class="form-control" type="hidden" id="edit-contact-id" name="contact_id" value="">
+                            <input class="form-control" type="tel" id="edit-contactnumber" name="contactnumber">
+                        </div>
+                        <div class="col-md-4">
+                            <label>address</label>
+                            <input class="form-control" type="text" id="edit-address" name="address">
+                        </div>
+                        <div class="py-3">
+                            <button id="submit-edit" class="btn btn-primary">update</button>
+                            <div id="cancel-edit" class="btn btn-secondary">Cancel</div>
+                        </div>
+
+                    </div>
+                </form>
+            </div>
+
+            <div class="row create-contact">
+                <div class="create-form">
+                    {{ form_start(form,{attr:{'novalidate':'novalidate'} }) }}
+                    <div class="row p-4 justify-content-around">
+                        <div class="col-md-4">
+                            {{ form_label(form.title) }}
+                            {{ form_widget(form.title) }}
+                            {{ form_errors(form.title) }}
+                        </div>
+                        <div class="col-md-4">
+                            {{ form_label(form.firstname) }}
+                            {{ form_widget(form.firstname) }}
+                            {{ form_errors(form.firstname) }}
+                        </div>
+                        <div class="col-md-4">
+                            {{ form_label(form.lastname) }}
+                            {{ form_widget(form.lastname) }}
+                            {{ form_errors(form.lastname) }}
+                        </div>
+                        <div class="col-md-4">
+                            {{ form_label(form.email) }}
+                            {{ form_widget(form.email) }}
+                            {{ form_errors(form.email) }}
+                        </div>
+                        <div class="col-md-4">
+                            {{ form_label(form.contactnumber) }}
+                            {{ form_widget(form.contactnumber) }}
+                            {{ form_errors(form.contactnumber) }}
+                        </div>
+                        <div class="col-md-4">
+                            {{ form_label(form.address) }}
+                            {{ form_widget(form.address) }}
+                            {{ form_errors(form.address) }}
+                        </div>
+                        <div class="py-3">
+                            {{ form_label(form.submit) }}
+                            {{ form_widget(form.submit) }}
+                        </div>
+                    </div>
+                    {{ form_end(form) }}
+                </div>
+
+
+            </div>
+            <div class="card-body">
+                <div class="table-responsive">
+                    <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
+                        <thead>
+                        <tr>
+                            <th>Title</th>
+                            <th>First Name</th>
+                            <th>Last Name</th>
+                            <th>Email</th>
+                            <th>Contact Number</th>
+                            <th>Address</th>
+                            <th>Action</th>
+                        </tr>
+                        </thead>
+
+                        <tbody>
+                        {% for contact in contacts %}
+                            <tr>
+                                <td>{{ contact.title }}</td>
+                                <td>{{ contact.firstname }}</td>
+                                <td>{{ contact.lastname }}</td>
+                                <td>{{ contact.email }}</td>
+                                <td>{{ contact.contactnumber }}</td>
+                                <td>{{ contact.address }}</td>
+                                <td>
+                                    <a class="edit-button" data-contact-id="{{ contact.id }}"><i
+                                                class="fa-solid fa-user-pen" data-toggle="tooltip" data-placement="top"
+                                                title="Edit"></i></a>
+                                    <a class="delete-button" href="{{ path('deletecontact',{id:contact.id}) }}"><i
+                                                class="fa-solid fa-trash-can" data-toggle="tooltip" data-placement="top"
+                                                title="Delete"></i></a>
+                                    <a class="view-button" data-contact-id="{{ contact.id }}" data-toggle="modal" data-target="#contactModal">
+                                        <i class="fa-solid fa-eye" style="color:black" data-toggle="tooltip" data-placement="top" title="View"></i>
+                                    </a>
+
+                                </td>
+                            </tr>
+                        {% endfor %}
+                        </tbody>
+                    </table>
+                    <div class="modal fade" id="contactModal" tabindex="-1" role="dialog" aria-labelledby="contactModalLabel" aria-hidden="true">
+                        <div class="modal-dialog modal-dialog-centered" role="document">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <h5 class="modal-title" id="contactModalLabel">Contact Details</h5>
+                                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                        <span aria-hidden="true">&times;</span>
+                                    </button>
+                                </div>
+                                <div class="modal-body">
+                                    <p><strong>Title:</strong> <span id="modal-title"></span></p>
+                                    <p><strong>First Name:</strong> <span id="modal-firstname"></span></p>
+                                    <p><strong>Last Name:</strong> <span id="modal-lastname"></span></p>
+                                    <p><strong>Email:</strong> <span id="modal-email"></span></p>
+                                    <p><strong>Contact Number:</strong> <span id="modal-contactnumber"></span></p>
+                                    <p><strong>Address:</strong> <span id="modal-address"></span></p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    {% endblock %}
+    {% block javascripts %}
+        {{ parent() }}
+        <script src="https://cdn.datatables.net/1.13.6/js/jquery.dataTables.min.js"></script>
+        <script src="https://cdn.datatables.net/1.13.6/js/dataTables.bootstrap4.min.js"></script>
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.5.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-ho+j7jyWK8fNQe+A12Hb8AhRq26LrZ/JpcUGGOn+Y7RsweNrtN/tE3MoK7ZeZDyx" crossorigin="anonymous"></script>
+        {{ encore_entry_script_tags('index') }}
+    {% endblock %}
 {% endblock %}

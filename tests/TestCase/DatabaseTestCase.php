@@ -18,6 +18,7 @@ class DatabaseTestCase extends WebTestCase
         $this->checkEnvironment();
 
         $kernel = self::bootKernel();
+        $this->encoder = self::$container->get('security.password_encoder');
         $this->entityManager = $kernel->getContainer()->get('doctrine')->getManager();
         $this->runCommand('doctrine:database:drop --force');
         $this->runCommand('doctrine:database:create');
