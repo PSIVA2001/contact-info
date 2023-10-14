@@ -1,0 +1,43 @@
+{% form_theme form 'form/bootstrap_5_layout.html.twig' %}
+{% block head %}
+    {% block title %}REGISTER PAGE{% endblock %}
+    <link rel = "icon" href ="{{ asset('images/favicon.png')}}"
+          type = "image/x-icon">
+    {% block stylesheets %}
+        {{ encore_entry_link_tags('app') }}
+    {% endblock %}
+{% endblock %}
+{% block body %}
+
+    {{ form_start(form,{attr:{'novalidate':'novalidate'} }) }}
+    {{ form_label(form.username) }}
+    {{ form_widget(form.username) }}
+    {{ form_errors(form.username) }}
+
+    {{ form_label(form.firstname) }}
+    {{ form_widget(form.firstname) }}
+    {{ form_errors(form.firstname) }}
+
+    {{ form_label(form.lastname) }}
+    {{ form_widget(form.lastname) }}
+    {{ form_errors(form.lastname) }}
+
+    {{ form_label(form.email) }}
+    {{ form_widget(form.email) }}
+    {{ form_errors(form.email) }}
+
+    {{ form_label(form.plainpassword) }}
+    {{ form_widget(form.plainpassword) }}
+    {{ form_errors(form.plainpassword) }}
+
+    {{ form_label(form.submit) }}
+    {{ form_widget(form.submit) }}
+
+
+
+    {{ form_end(form) }}
+
+{% endblock %}
+{% block javascripts %}
+    {{ encore_entry_script_tags('app') }}
+{% endblock %}
