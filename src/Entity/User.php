@@ -60,6 +60,11 @@ class User implements UserInterface
      */
     private $contacts;
 
+    /**
+     * @ORM\Column(type="boolean", nullable=true)
+     */
+    private $isverified;
+
     public function __construct()
     {
         $this->contacts = new ArrayCollection();
@@ -203,6 +208,18 @@ class User implements UserInterface
                 $contact->setUser(null);
             }
         }
+
+        return $this;
+    }
+
+    public function getIsverified(): ?bool
+    {
+        return $this->isverified;
+    }
+
+    public function setIsverified(?bool $isverified): self
+    {
+        $this->isverified = $isverified;
 
         return $this;
     }

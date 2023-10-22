@@ -5,6 +5,7 @@ namespace App\Controller;
 use App\Entity\Contacts;
 use App\Entity\User;
 use App\Form\ContactType;
+use Doctrine\ORM\EntityManagerInterface;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
@@ -77,6 +78,8 @@ class ContactController extends AbstractController
         $this->addFlash('error', 'Contact Deleted Successfully.');
         return $this->redirectToRoute('contact');
     }
+
+
 
 
 }
