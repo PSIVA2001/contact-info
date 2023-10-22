@@ -26,7 +26,7 @@ Clone the repository to your local machine:
 
 ## Create the database schema:
 
-Configure your Symfony environment. You'll need to set up your database connection in .env and .env.test file.
+Configure your Symfony environment. You'll need to set up your database connection and Email in .env and .env.test file.
 
     php bin/console doctrine:database:create
     
